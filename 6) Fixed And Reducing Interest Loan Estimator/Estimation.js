@@ -1,60 +1,60 @@
+const _principalAmount = document.getElementById("principalAmount");
+const _interestRateYear = document.getElementById("interestRate");
+const _tenureMonth = document.getElementById("tenure");
 
-/* 
-
-    Fill with appropriate and required javascript global variables  code here 
-
-*/
-
-
-
-function EstimateReducingInterestLoan()
-{
-	/* Fill with required javascript code to read input values from HTML Components  */
-
-
-	  calculateEMI();
-      totalPayment();
-      totalInterest();
-      EstimateFixedInterestLoan();
-
-
-    
+function getEmiReducing(P, N, R) {
+    return (P * R * (Math.pow((1 + R), N) / (Math.pow((1 + R), N) - 1)));
 }
 
-function EstimateFixedInterestLoan()
-{
-    /* Fill with required javascript code here  */
-    document.getElementById("tInterestFixed").innerHTML = ""; /*Assign total Interest value here*/
-    
-     /* Fill with required javascript code here  */
-    document.getElementById("tPaymentFixed").innerHTML = ""; /*Assign total payment value here*/
-    
-     /* Fill with required javascript code here  */
-    document.getElementById("EMIFixed").innerHTML = ""; /*Assign emi  value here*/
-    
-    
+function EstimateReducingInterestLoan() {
+    calculateEMI();
+    totalPayment();
+    totalInterest();
+    EstimateFixedInterestLoan();
 }
 
-function calculateEMI(){
-	
-    /* Fill with required javascript code here  */
-    
-    document.getElementById("EMI").innerHTML = " ";/*Assign emi value here*/
+function EstimateFixedInterestLoan() {
+    const principalAmount = Number(_principalAmount.value);
+    const interestRateYear = Number(_interestRateYear.value);
+    const tenureMonth = Number(_tenureMonth.value);
+
+    const totalInterestFixed = principalAmount * interestRateYear * tenureMonth / 1200;
+    const totalPaymentFixed = principalAmount + totalInterestFixed;
+    const emiFixed = totalPaymentFixed / tenureMonth;
+
+    document.getElementById("tInterestFixed").innerHTML = Number(totalInterestFixed).toFixed(2).toString();
+    document.getElementById("tPaymentFixed").innerHTML = Number(totalPaymentFixed).toFixed(2).toString();
+    document.getElementById("EMIFixed").innerHTML = Number(emiFixed).toFixed(2).toString();
 }
 
-function totalPayment(){
-	
-	/* Fill with required javascript code here  */
-	
-	
-    document.getElementById("tPayment").innerHTML = ""; /*Assign total payment value here*/
+function reducingLoan() {
+    const principalAmount = Number(_principalAmount.value);
+    const interestRateYear = Number(_interestRateYear.value);
+    const interestRateMonth = Number(interestRateYear / 1200);
+    const tenureMonth = Number(_tenureMonth.value);
+
+    const emiReducing = getEmiReducing(principalAmount, tenureMonth, interestRateMonth);
+    const totalPaymentReducing = tenureMonth * emiReducing;
+    const totalInterestReducing = totalPaymentReducing - principalAmount;
+
+    return {
+        emiReducing: emiReducing,
+        totalPaymentReducing: totalPaymentReducing,
+        totalInterestReducing: totalInterestReducing
+    };
 }
 
-function totalInterest(){
-	
-/* Fill with required javascript code here  */
-
-    document.getElementById("tInterest").innerHTML = ""; /*Assign total Interest value here*/
+function calculateEMI() {
+    const emiReducing = reducingLoan().emiReducing;
+    document.getElementById("EMI").innerHTML = Number(emiReducing).toFixed(2).toString();
 }
 
+function totalPayment() {
+    const totalPaymentReducing = reducingLoan().totalPaymentReducing;
+    document.getElementById("tPayment").innerHTML = Number(totalPaymentReducing).toFixed(2).toString();
+}
 
+function totalInterest() {
+    const totalInterestReducing = reducingLoan().totalInterestReducing;
+    document.getElementById("tInterest").innerText = Number(totalInterestReducing).toFixed(2).toString();
+}
