@@ -1,7 +1,3 @@
-Car rental system - Insert Values
-
-Refer to the given schema diagram. Insert the below records into Rentals Table. Assume the rentals table has been already created.
-
 
 
 INSERT INTO rentals(rental_id, customer_id, car_id, pickup_date, return_date, km_driven, fare_amount) 
